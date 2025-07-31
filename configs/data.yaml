@@ -1,0 +1,71 @@
+# chiller_data.yaml
+
+path: .
+train: D:\clearML-MLOps-Project\data\train
+val: D:\clearML-MLOps-Project\data\test
+
+nc: 62  # Number of classes
+
+names:
+  - FV_Aple_1000ml
+  - FV_RMango_1000ml
+  - FV_Chaunsa_1000ml
+  - FV_Grapes_1000ml
+  - FV_Guava_1000ml
+  - FV_Peach_1000ml
+  - FV_Orange_1000ml
+  - FV_Mix_1000ml
+  - FV_Pinapple_1000ml
+  - FV_Red_Anar_1000ml
+  - FV_Orng+Mango_1000ml
+  - FV_Kinnow_1000ml
+  - NesF_Aple_1000ml
+  - NesF_Mango_1000ml
+  - FV_Aple_200ml
+  - FV_RMango_200ml
+  - FV_Chaunsa_200ml
+  - FV_Grapes_200ml
+  - FV_Guava_200ml
+  - FV_Peach_200ml
+  - FV_Mix_200ml
+  - FV_Pinapple_200ml
+  - FV_Orng+Mango_200ml
+  - FV_Kinnow_200ml
+  - NesF_Aple_200ml
+  - NesF_Mango_200ml
+  - Nes_Milo_200ml
+  - Nes_MP_Yougurt_Pouch_250gm
+  - Nes_PLife_500ml
+  - Nes_PLife_1500ml
+  - NES_PLIFE_1000ML
+  - NES_PLIFE_330ML
+  - NES_PLIFE_ACTIVE_550ML
+  - NESCAFE_LATTE_200ML
+  - NESCAFE_MOCHA_200ML
+  - Nes_MP_Butter_200GM
+  - Nes_MP_Butter_100GM
+  - NES_FRUIT_YOGURT_PEACH_100GM
+  - NES_FRUIT_YOGURT_STRAWBERRY_100GM
+  - NES_MILKPAK_YOGURT_CUP_450GM
+  - NES_NESVITA_YOGURT_400GM
+  - NES_YOGURT_SWEET_&_TASTY_400GM
+  - NES_YOGURT_SWEET_&_TASTY_200GM
+  - NES_PODINA_RAITA_250GM
+  - NES_ZEERA_RAITA_250GM
+  - NES_MILKPAK_YOGURT_POUCH_1000GM
+  - NES_MILKPAK_YOGURT_POUCH_500GM
+  - NFV_SPARK_FD_PEACH_250ML
+  - NFV_SPARK_FD_LIME_250ML
+  - NFV_FALSA_230ML
+  - NFV_RED_ANAR_230ML
+  - NESCAFE_LATTE_PET_220ML
+  - NESCAFE_MOCHA_PET_220ML
+  - NFV_FALSA_1000ML
+  - NES-HAZELNUT-PET-220ML
+  - NES-SALTED-CARMEL-PET-220ML
+  - NFV_SPARK_FD_APPLE_250ML
+  - NES_LABAN_350ML
+  - Nes-Butter-UNSALTED
+  - Nes_Milo_PET_220ML
+  - Nes_Chaunsa_PET_220ML
+  - Nes_Yoguart_Unsweetend_400GM
