@@ -24,6 +24,27 @@ jobs:
           python -m pip install --upgrade pip
           pip install "dvc[s3]" ultralytics clearml opencv-python
 
+      - name: Validate ClearML secrets
+        run: |
+          if [ -z "${{ secrets.CLEARML_API_KEY }}" ] || [ -z "${{ secrets.CLEARML_API_SECRET }}" ]; then
+            echo "CLEARML_API_KEY or CLEARML_API_SECRET is missing. Aborting."
+            exit 1
+          fi
+          echo "ClearML secrets present."
+
+      - name: Validate AWS secrets & region
+        run: |
+          if [ -z "${{ secrets.AWS_ACCESS_KEY_ID }}" ] || [ -z "${{ secrets.AWS_SECRET_ACCESS_KEY }}" ] || [ -z "${{ secrets.AWS_DEFAULT_REGION }}" ]; then
+            echo "AWS credentials or region missing. Aborting."
+            exit 1
+          fi
+          # Basic sanity: reject if region contains backslash or whitespace
+          if [[ "${{ secrets.AWS_DEFAULT_REGION }}" == *'\'* ]] || [[ "${{ secrets.AWS_DEFAULT_REGION }}" =~ \  ]]; then
+            echo "AWS_DEFAULT_REGION appears malformed: '${{ secrets.AWS_DEFAULT_REGION }}'"
+            exit 1
+          fi
+          echo "AWS credentials and region look present."
+
       - name: Debug region secret
         run: |
           echo ">>> Region secret raw: '${{ secrets.AWS_DEFAULT_REGION }}'"
@@ -39,8 +60,7 @@ jobs:
         run: |
           echo "CLEARML_API_KEY=${{ secrets.CLEARML_API_KEY }}" >> $GITHUB_ENV
           echo "CLEARML_API_SECRET=${{ secrets.CLEARML_API_SECRET }}" >> $GITHUB_ENV
-          # If using self-hosted ClearML server, uncomment and set:
-          # echo "CLEARML_API_HOST=${{ secrets.CLEARML_API_HOST }}" >> $GITHUB_ENV
+          # echo "CLEARML_API_HOST=${{ secrets.CLEARML_API_HOST }}" >> $GITHUB_ENV  # if self-hosted
 
       - name: Pull DVC data & model
         run: dvc pull
