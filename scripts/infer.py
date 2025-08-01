@@ -19,8 +19,7 @@ def run_inference(source_path):
         task_name=f"YOLOv8 Inference ({commit})",
         task_type=Task.TaskTypes.inference
     )
-    task.add_tags(["ci"])
-    task.add_tag(branch)
+    task.add_tags(["ci", branch])
     task.set_parameter("git.commit", commit)
     task.set_parameter("git.branch", branch)
 
@@ -53,13 +52,13 @@ def run_inference(source_path):
         # Log raw predictions
         try:
             task.get_logger().report_text(
-                results[0].tojson(), 
+                results[0].tojson(),
                 title=f"Raw Predictions - {os.path.basename(image_path)}"
             )
-        except Exception:
-            pass
+        except Exception as e:
+            print(f"[Warning] Could not log predictions: {e}")
 
-        # Save annotated image and report to ClearML
+        # Save and log annotated image
         for result in results:
             annotated = result.plot()
             out_filename = os.path.basename(image_path)
