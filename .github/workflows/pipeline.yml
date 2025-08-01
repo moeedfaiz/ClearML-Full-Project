@@ -3,6 +3,7 @@ name: DVC + YOLOv8 Pipeline
 on:
   push:
     branches: [ master ]
+  workflow_dispatch:
 
 jobs:
   run_pipeline:
@@ -23,12 +24,18 @@ jobs:
           python -m pip install --upgrade pip
           pip install "dvc[s3]" ultralytics clearml opencv-python
 
+      - name: Debug region secret
+        run: |
+          echo ">>> Region secret raw: '${{ secrets.AWS_DEFAULT_REGION }}'"
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws-access-key-id: \${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: \${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: \${{ secrets.AWS_DEFAULT_REGION }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+          # --- if the secret is still problematic, temporarily override below for testing ---
+          # aws-region: eu-north-1
 
       - name: Pull DVC data & model
         run: dvc pull
