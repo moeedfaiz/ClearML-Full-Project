@@ -24,10 +24,10 @@ def run_inference(source_path):
     task.set_parameter("git.branch", branch)
 
     # Ensure model is available via DVC
-    os.system("dvc pull models/chiller_yolov85/weights/best.pt")
+    os.system("dvc pull models/chiller_yolov84/weights/best.pt")
 
     # Load YOLO model
-    model = YOLO("models/chiller_yolov85/weights/best.pt")
+    model = YOLO("models/chiller_yolov84/weights/best.pt")
 
     # Determine input(s)
     image_paths = []
