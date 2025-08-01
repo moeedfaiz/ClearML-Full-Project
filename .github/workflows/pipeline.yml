@@ -34,8 +34,13 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
-          # --- if the secret is still problematic, temporarily override below for testing ---
-          # aws-region: eu-north-1
+
+      - name: Configure ClearML env
+        run: |
+          echo "CLEARML_API_KEY=${{ secrets.CLEARML_API_KEY }}" >> $GITHUB_ENV
+          echo "CLEARML_API_SECRET=${{ secrets.CLEARML_API_SECRET }}" >> $GITHUB_ENV
+          # If using self-hosted ClearML server, uncomment and set:
+          # echo "CLEARML_API_HOST=${{ secrets.CLEARML_API_HOST }}" >> $GITHUB_ENV
 
       - name: Pull DVC data & model
         run: dvc pull
