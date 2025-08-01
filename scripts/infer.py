@@ -19,7 +19,7 @@ def run_inference(source_path):
         task_name=f"YOLOv8 Inference ({commit})",
         task_type=Task.TaskTypes.inference
     )
-    task.add_tag("ci")
+    task.add_tags(["ci"])
     task.add_tag(branch)
     task.set_parameter("git.commit", commit)
     task.set_parameter("git.branch", branch)
