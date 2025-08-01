@@ -1,0 +1,40 @@
+name: DVC + YOLOv8 Pipeline
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  run_pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install "dvc[s3]" ultralytics clearml opencv-python
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: \${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: \${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: \${{ secrets.AWS_DEFAULT_REGION }}
+
+      - name: Pull DVC data & model
+        run: dvc pull
+
+      - name: Run inference
+        run: python scripts/infer.py
+
+      - name: Push DVC outputs
+        run: dvc push
