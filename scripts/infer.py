@@ -1,36 +1,23 @@
 import os
 from ultralytics import YOLO
 from PIL import Image
-import cv2
+import io
 
-def run_inference():
-    model = YOLO("models/chiller_yolov84/weights/best.pt")  # Adjust path as needed
+# ✅ Ensure the model is pulled via DVC
+os.system("dvc pull models/chiller_yolov84/weights/best.pt")
 
-    # Set path to image or directory
-    image_dir = "inference/image/image_605466.jpg"
-    output_dir = "inference/output"
-    os.makedirs(output_dir, exist_ok=True)
+# ✅ Load the YOLOv8 model from DVC-tracked weights
+model = YOLO("models/chiller_yolov84/weights/best.pt")
 
-    image_paths = []
-    if os.path.isdir(image_dir):
-        image_paths = [os.path.join(image_dir, f) for f in os.listdir(image_dir)
-                       if f.lower().endswith((".jpg", ".png", ".jpeg"))]
-    elif os.path.isfile(image_dir):
-        image_paths = [image_dir]
-    else:
-        print(f"Invalid path: {image_dir}")
-        return
-
-    for image_path in image_paths:
-        print(f"Inferencing on {image_path}...")
-        results = model(image_path)  # returns list of Results objects
-
-        for i, result in enumerate(results):
-            # Save annotated image using OpenCV
-            annotated_img = result.plot()
-            output_path = os.path.join(output_dir, os.path.basename(image_path))
-            cv2.imwrite(output_path, annotated_img)
-            print(f"Saved: {output_path}")
+# Example inference function
+def run_inference(image_path):
+    results = model(image_path)
+    for result in results:
+        print(result)
+        # Optionally save annotated image
+        result.save(filename="inference_output.jpg")
 
 if __name__ == "__main__":
-    run_inference()
+    # Example usage
+    test_image = "inference/image/image_605466.jpg"
+    run_inference(test_image)
