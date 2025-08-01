@@ -8,6 +8,7 @@ on:
 jobs:
   run_pipeline:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -30,7 +31,7 @@ jobs:
             echo "CLEARML_API_KEY or CLEARML_API_SECRET is missing. Aborting."
             exit 1
           fi
-          echo "ClearML secrets present."
+          echo "✅ ClearML secrets present."
 
       - name: Validate AWS secrets & region
         run: |
@@ -38,16 +39,11 @@ jobs:
             echo "AWS credentials or region missing. Aborting."
             exit 1
           fi
-          # Basic sanity: reject if region contains backslash or whitespace
           if [[ "${{ secrets.AWS_DEFAULT_REGION }}" == *'\'* ]] || [[ "${{ secrets.AWS_DEFAULT_REGION }}" =~ \  ]]; then
             echo "AWS_DEFAULT_REGION appears malformed: '${{ secrets.AWS_DEFAULT_REGION }}'"
             exit 1
           fi
-          echo "AWS credentials and region look present."
-
-      - name: Debug region secret
-        run: |
-          echo ">>> Region secret raw: '${{ secrets.AWS_DEFAULT_REGION }}'"
+          echo "✅ AWS credentials and region look valid."
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -58,9 +54,11 @@ jobs:
 
       - name: Configure ClearML env
         run: |
-          echo "CLEARML_API_KEY=${{ secrets.CLEARML_API_KEY }}" >> $GITHUB_ENV
-          echo "CLEARML_API_SECRET=${{ secrets.CLEARML_API_SECRET }}" >> $GITHUB_ENV
-          # echo "CLEARML_API_HOST=${{ secrets.CLEARML_API_HOST }}" >> $GITHUB_ENV  # if self-hosted
+          echo "CLEARML_API_ACCESS_KEY=${{ secrets.CLEARML_API_KEY }}" >> $GITHUB_ENV
+          echo "CLEARML_API_SECRET_KEY=${{ secrets.CLEARML_API_SECRET }}" >> $GITHUB_ENV
+          echo "CLEARML_API_HOST=https://api.clear.ml" >> $GITHUB_ENV
+          echo "CLEARML_WEB_HOST=https://app.clear.ml" >> $GITHUB_ENV
+          echo "CLEARML_FILES_HOST=https://files.clear.ml" >> $GITHUB_ENV
 
       - name: Pull DVC data & model
         run: dvc pull
